@@ -34,3 +34,45 @@ code {
   align-items: center;
   justify-content: space-evenly;
 }
+
+.data-list-container {
+  padding: 30px;
+  background: linear-gradient(
+    180deg,
+    #eff2ff -30.56%,
+    rgba(232, 236, 255, 0) 135.85%
+  );
+}
+
+.ms-DetailsHeader {
+  padding: 10px !important;
+}
+
+.ms-DetailsRow-fields {
+  padding: 10px;
+}
+
+.ms-DetailsList [role="grid"] {
+  overflow: hidden;
+}
+/* 
+.ms-TextField-fieldGroup {
+  border: none !important;
+}
+*/
+
+.ms-TextField-fieldGroup::after {
+  border: none !important;
+}
+
+.ms-TextField-field::placeholder {
+  color: #929292;
+}
+
+.data-list-action-container {
+  padding-bottom: 10px;
+}
+
+.ms-Dialog-content .ms-Dialog-header {
+  display: none;
+}

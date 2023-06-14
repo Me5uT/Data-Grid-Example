@@ -1,6 +1,6 @@
 export interface IMockDataModel {
   id: string;
-  socialMediaLink: string;
+  link: string;
   socialMedia: string;
   description: string;
 }

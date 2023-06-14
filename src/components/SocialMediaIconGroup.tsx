@@ -9,13 +9,14 @@ import {
   faBehance,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import { Stack } from "@fluentui/react";
 
 interface ISocialMediaIconGroupProps {}
 
 const socialMediaIconGroups: FontAwesomeIconProps[] = [
   {
     icon: faYoutube,
-    size: "xl",
+    size: "lg",
     style: {
       color: "white",
       backgroundColor: "#744BFC",
@@ -25,7 +26,7 @@ const socialMediaIconGroups: FontAwesomeIconProps[] = [
   },
   {
     icon: faInstagramSquare,
-    size: "xl",
+    size: "lg",
     style: {
       color: "white",
       backgroundColor: "#744BFC",
@@ -35,7 +36,7 @@ const socialMediaIconGroups: FontAwesomeIconProps[] = [
   },
   {
     icon: faBehance,
-    size: "xl",
+    size: "lg",
     style: {
       color: "white",
       backgroundColor: "#744BFC",
@@ -45,7 +46,7 @@ const socialMediaIconGroups: FontAwesomeIconProps[] = [
   },
   {
     icon: faLinkedinIn,
-    size: "xl",
+    size: "lg",
     style: {
       color: "white",
       backgroundColor: "#744BFC",
@@ -59,12 +60,16 @@ export const SocialMediaIconGroup: React.FC<
   ISocialMediaIconGroupProps
 > = () => {
   return (
-    <div className="social-media-container">
+    <Stack
+      className="social-media-container"
+      horizontal
+      horizontalAlign="space-evenly"
+    >
       {socialMediaIconGroups.map(
-        (socialMediaIconProps: FontAwesomeIconProps) => {
-          return <FontAwesomeIcon {...socialMediaIconProps} />;
+        (socialMediaIconProps: FontAwesomeIconProps, index: number) => {
+          return <FontAwesomeIcon {...socialMediaIconProps} key={index} />;
         }
       )}
-    </div>
+    </Stack>
   );
 };

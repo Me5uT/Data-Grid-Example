@@ -1,4 +1,3 @@
-import "devextreme/dist/css/dx.light.css";
 import React from "react";
 import { MyContextProvider } from "./store/ContextProvider";
 import { Home } from "./pages/Home";
