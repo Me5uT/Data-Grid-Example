@@ -1,6 +1,7 @@
+import { mockData } from "../api/MockAxios";
 import { IMockDataModel } from "../model/MockDataModel";
 
-export const mockData: IMockDataModel[] = [
+export const defaultData: IMockDataModel[] = [
   {
     id: "1",
     link: "instagram.com/mobilerast/",
@@ -29,9 +30,11 @@ export const mockData: IMockDataModel[] = [
     description:
       "Software Development Agency Rast Mobile Information Technology Ltd.",
   },
-  { id: "5", link: "", socialMedia: "", description: "" },
-  { id: "6", link: "", socialMedia: "", description: "" },
-  { id: "7", link: "", socialMedia: "", description: "" },
-  { id: "8", link: "", socialMedia: "", description: "" },
-  { id: "9", link: "", socialMedia: "", description: "" },
 ];
+
+export const initializedMockData: IMockDataModel = {
+  id: "",
+  link: "",
+  socialMedia: "",
+  description: "",
+};

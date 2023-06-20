@@ -1,6 +1,5 @@
 import {
   DefaultButton,
-  DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   IColumn,
@@ -10,6 +9,7 @@ import {
   IconButton,
   Position,
   SelectionMode,
+  ShimmeredDetailsList,
   SpinButton,
   Stack,
   TextField,
@@ -17,26 +17,54 @@ import {
 import { Pagination } from "@fluentui/react-experiments";
 import { getTheme } from "@fluentui/react/lib/Styling";
 import React, { useState } from "react";
-import { mockData } from "../mock-data/MockData";
+import { API } from "../api/API";
+import { FormModal } from "../components/FormModal";
 import { IMockDataModel } from "../model/MockDataModel";
 import { copyAndSort } from "../utilities/Services";
-import { FormModal } from "../components/FormModal";
+import { initializedMockData, defaultData } from "../mock-data/MockData";
 
 const theme = getTheme();
 
 interface IDataListProps {}
 
 export const DataList: React.FC<IDataListProps> = () => {
-  const [items, setItems] = useState<IMockDataModel[]>(mockData);
+  const [items, setItems] = useState<IMockDataModel[]>([]);
   const [sortedColumn, setSortedColumn] = useState<IColumn | null>(null);
   const [isSortedDescending, setIsSortedDescending] = useState<boolean>(false);
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [isModalHidden, setModalHidden] = useState<boolean>(false);
+  const [isModalHidden, setModalHidden] = useState<boolean>(true);
+  const [shimmer, setShimmer] = useState<boolean>(true);
+  const [formInputs, setFormInputs] =
+    useState<IMockDataModel>(initializedMockData);
 
   const suffix = " rows";
   const min = 0;
   const max = 100;
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await API.getAll("/account");
+        setItems(response?.data.payload);
+        setShimmer(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [defaultData]);
+
+  const onPostData = async (url: string, data: IMockDataModel) => {
+    try {
+      const postData = await API.post(url, data);
+      setItems(postData?.data.payload);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /** Sorting when click to column header */
   const onColumnClick = (
     ev: React.MouseEvent<HTMLElement>,
     column: IColumn
@@ -72,6 +100,7 @@ export const DataList: React.FC<IDataListProps> = () => {
     setIsSortedDescending(newIsSortedDescending);
   };
 
+  /** Column headers */
   const columns: IColumn[] = [
     {
       key: "column1",
@@ -108,6 +137,7 @@ export const DataList: React.FC<IDataListProps> = () => {
     },
   ];
 
+  /** each row has a different color */
   const onRenderRow: IDetailsListProps["onRenderRow"] = (
     props: IDetailsRowProps | undefined
   ) => {
@@ -257,16 +287,17 @@ export const DataList: React.FC<IDataListProps> = () => {
           />
         </Stack>
       </Stack>
-      <DetailsList
+      <ShimmeredDetailsList
         items={items}
-        setKey="none"
-        getKey={(item: IMockDataModel) => {
-          return item.id;
-        }}
+        setKey="items"
+        // getKey={(item: IMockDataModel) => {
+        //   return item.id;
+        // }}
         columns={columns}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.fixedColumns}
         onRenderRow={onRenderRow}
+        enableShimmer={shimmer}
       />
       <Stack
         horizontal
@@ -329,9 +360,12 @@ export const DataList: React.FC<IDataListProps> = () => {
           processing={false}
           hidden={isModalHidden}
           onCancel={() => {
+            setFormInputs(initializedMockData);
             setModalHidden(true);
           }}
           onConfirm={() => {
+            onPostData("/account", formInputs);
+            setFormInputs(initializedMockData);
             setModalHidden(true);
           }}
         >
@@ -345,6 +379,7 @@ export const DataList: React.FC<IDataListProps> = () => {
                   marginBottom: 15,
                 },
               }}
+              onChange={(e, value) => (formInputs.link = value ? value : "")}
             />
             <TextField
               label="Sosyal Medya Adı"
@@ -355,12 +390,18 @@ export const DataList: React.FC<IDataListProps> = () => {
                   marginBottom: 15,
                 },
               }}
+              onChange={(e, value) =>
+                (formInputs.socialMedia = value ? value : "")
+              }
             />
             <TextField
               label="Açıklama"
               styles={{
                 fieldGroup: { borderRadius: 38, border: "1px solid #D9D9D9" },
               }}
+              onChange={(e, value) =>
+                (formInputs.description = value ? value : "")
+              }
             />
           </Stack>
         </FormModal>
